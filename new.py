@@ -22,3 +22,5 @@ def updates_tables():
     print("Таблица admin создана.")
     conn.commit()
     cursor.close()
+
+updates_tables()
