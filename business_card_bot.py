@@ -16,28 +16,23 @@ dp = Dispatcher()
 
 
 @dp.message(Command("start", "старт"))
-async def cmd_start(message: types.Message):
-    text = ""
-    # await bot.send_video(message.chat.id, open('files/DEMO.mp4', 'rb'))
-    # video_file = FSInputFile('files/DEMO.mp4')
-    # await bot.send_video(message.chat.id, video_file)
-    await bot.send_message(message.chat.id, f"Наш сайт:\n"
-                                            f"https://aistrategiya.ru/\n\n"
-                                            
-                                            f"Наши Telegram-каналы:\n"
-                                            f"@AI_Strategy_razrabotka_botov_tg\n"
-                                            f"@AsHuman_AI\n\n"
-                                            
-                                            f"Наш ИИ-ассистент для подготовки ТЗ:\n"
-                                            f"@As_HumanHelp\n\n"
-                                            
-                                            f"Наше портфолио:\n"
-                                            f"https://www.fl.ru/users/antonthai2022/portfolio/\n"
-                                            f"@As_HumanBot\n\n"
-                                            
-                                            f"Контакты для связи:\n\n"
-                                            f"@vedename - Евгений Мамонтов\n"
-                                            f"@Anton_AsHuman - Антон Борисенко\n")
+async def cmd_start(message: types.Message, bot: Bot):
+    text = (f"Наш сайт:\n"
+            f"https://aistrategiya.ru/\n\n"
+            f"Наши Telegram-каналы:\n"
+            f"@AI_Strategy_razrabotka_botov_tg\n"
+            f"@AsHuman_AI\n\n"
+            f"Наш ИИ-ассистент для подготовки ТЗ:\n"
+            f"@As_HumanHelp\n\n"
+            f"Наше портфолио:\n"
+            f"https://www.fl.ru/users/antonthai2022/portfolio/\n"
+            f"@As_HumanBot\n\n"
+            f"Контакты для связи:\n\n"
+            f"@vedename - Евгений Мамонтов\n"
+            f"@Anton_AsHuman - Антон Борисенко\n")
+
+    video_file = FSInputFile(path='files/DEMO.mp4')
+    await bot.send_video(message.chat.id, video=video_file, caption=text)
     # Узнаем ид пользователя.
     user_id = message.from_user.id
     print("Читаем лог из json.")
