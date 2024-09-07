@@ -1,12 +1,14 @@
 import asyncio
 import json
 from datetime import datetime
+import sqlite3
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 from aiogram.types import FSInputFile
 
 import config
+from FDataBase import FDataBase
 
 
 # Объект бота
@@ -14,9 +16,16 @@ bot = Bot(token=config.BOT_API_TOKEN)
 # Диспетчер
 dp = Dispatcher()
 
+# # Подключение к бд
+def connect_db():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row  # Формирование ответа в виде словаря, а не кортежа
+    return conn
+
 
 @dp.message(Command("start", "старт"))
-async def cmd_start(message: types.Message, bot: Bot):
+async def cmd_start(message: types.Message):
+    # TODO вынести текст в отдельный модуль, для удобства редактирования через админку.
     text = (f"Наш сайт:\n"
             f"https://aistrategiya.ru/\n\n"
             f"Наши Telegram-каналы:\n"
@@ -27,7 +36,7 @@ async def cmd_start(message: types.Message, bot: Bot):
             f"Наше портфолио:\n"
             f"https://www.fl.ru/users/antonthai2022/portfolio/\n"
             f"@As_HumanBot\n\n"
-            f"Контакты для связи:\n\n"
+            f"Контакты для связи:\n"
             f"@vedename - Евгений Мамонтов\n"
             f"@Anton_AsHuman - Антон Борисенко\n")
 
@@ -35,28 +44,19 @@ async def cmd_start(message: types.Message, bot: Bot):
     await bot.send_video(message.chat.id, video=video_file, caption=text)
     # Узнаем ид пользователя.
     user_id = message.from_user.id
-    print("Читаем лог из json.")
-    try:
-        with open('start_log.json', 'r') as f:
-            data_log = json.load(f)
-    except FileNotFoundError:
-        print("Список логов в формате json не обнаружен.")
-    print("Лог из json прочитан.")
-    date_now = datetime.now()
+
+    # date_now = datetime.now()
+    first_name = message.from_user.first_name
+    last_name = message.from_user.last_name
+    username = message.from_user.username
+
     # Запись в лог.
-    # Ключ ид пользователя, соответсвенно остается только поселеднее время входа.
-    data_log[f"{user_id}"] = {
-        "user_id": user_id,
-        "last_time": f"{date_now}",
-        "first_name": message.from_user.first_name,
-        "last_name": message.from_user.last_name,
-        "username": message.from_user.username
-    }
-    try:
-        with open("start_log.json", 'w') as f:
-            json.dump(data_log, f, sort_keys=False, ensure_ascii=False, indent=4, separators=(',', ': '))
-    except FileNotFoundError:
-        print(f"Файл 'start_log.json' не найден")
+    # Перед обновлением необходимо проверить заходил ли этот пользователь ранее.
+    db = FDataBase(connect_db())
+    if db.get_user_log(user_id):  #
+        db.update_log(user_id)
+    else:
+        db.add_log(user_id, first_name, last_name, username)
 
 
 # Чтение лога. Просмотр стучавшихся пользователей.
@@ -66,19 +66,15 @@ async def cmd_log(message: types.Message):
     user_id = message.from_user.id
     # Данный функционал доступен только админам.
     if user_id in config.admins:
-        try:
-            with open("start_log.json", "r") as f:
-                data_json = json.load(f)
-            for i in data_json.items():
-                await bot.send_message(message.chat.id,
-                                       f'Пользователь: {i[1]["first_name"]} {i[1]["last_name"]} {i[1]["username"]} \n'
-                                       f'Последний вход: {i[1]["last_time"]} \n'
-                                       f'id: `{i[1]["user_id"]}`', parse_mode="MARKDOWN")
+        db = FDataBase(connect_db())
+        logs = db.get_log()
+        for i in logs:
+            await bot.send_message(message.chat.id,
+                                   f'Пользователь: {i["first_name"]} {i["last_name"]} {i["username"]} \n'
+                                   f'Последний вход: {i["date_last_in"]} \n'
+                                   f'id: `{i["user_tg_id"]}`', parse_mode="MARKDOWN")
 
-        except FileNotFoundError:
-            print("Список логов в формате json не обнаружен.")
-        print(data_json)
-
+        print(f"logs {logs[0]['user_tg_id']}")
 
 
 async def main():

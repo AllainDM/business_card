@@ -4,3 +4,8 @@ venv
 
 # Конфиг
 config.py
+setting.py
+
+# DB
+database.db
+
