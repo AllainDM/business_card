@@ -1,12 +1,12 @@
 import asyncio
-import json
-from datetime import datetime
+# import json
+# from datetime import datetime
 import sqlite3
 
-import emoji
+# import emoji
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
-from aiogram.types import FSInputFile
+# from aiogram.types import FSInputFile
 
 import config
 from FDataBase import FDataBase
@@ -19,7 +19,6 @@ bot = Bot(token=config.BOT_API_TOKEN)
 dp = Dispatcher()
 
 
-
 # # Подключение к бд
 def connect_db():
     conn = sqlite3.connect('database.db')
@@ -29,11 +28,11 @@ def connect_db():
 
 @dp.message(Command("start", "старт"))
 async def cmd_start(message: types.Message):
-    video_file = FSInputFile(path='files/DEMO.mp4')
-
+    # video_file = FSInputFile(path='files/DEMO.mp4')
+    video_id = "BAACAgIAAxkDAAIDOmbnJnNzf_rwgSfmoz0d1AABwmaJPQACVGIAA-k5S18IgqIYQ3FbNgQ"
     # TODO вынести текст в отдельный модуль, для удобства редактирования через админку.
     text = main_text.main_text
-    await bot.send_video(message.chat.id, video=video_file, caption=text)
+    await bot.send_video(message.chat.id, video=video_id, caption=text)
 
     # Узнаем ид пользователя.
     user_id = message.from_user.id
