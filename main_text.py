@@ -25,4 +25,4 @@ main_text = (f"{emoji.emojize(':check_mark_button:')} Добро пожалов�
                  f"@Anton_AsHuman - Антон Борисенко\n")
 
 # main_video_id = "BAACAgIAAxkDAAOrZucrXglPtWDTd0nB-vh-RCTag8sAAsFRAAJkjTlLaaZNuCbC4Ec2BA"
-main_video_id = "BAACAgIAAxkDAAIDkmbnWXkOynCU98eeyMsqkdLVzjZOAALJZAAD6TlL6kU3-dis8a02BA"
+main_video_id = "BAACAgIAAxkDAAIDkmbnWXkOynCU98eeyMsqkdLVzjZOAALJZAAD6TlL6kU3-dis8a02BA1"

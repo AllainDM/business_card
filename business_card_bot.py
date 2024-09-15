@@ -42,10 +42,9 @@ async def cmd_start(message: types.Message):
     # await bot.send_video(message.chat.id, video=video_mg.media, caption=text)
     try:
         await bot.send_video(message.chat.id, video=video_id, caption=text)
-        # await bot.send_video(message.chat.id, video=video_id, caption=text)
     except:
         # Запасной вариант выцепления ид файла.
-        video_file = FSInputFile(path='files/DEMO2.mp4')
+        video_file = FSInputFile(path='files/DEMO3.mp4')
         msg = await bot.send_video(message.chat.id, video=video_file, caption=text)
         # Глобально перезапишем ид.
         video_id = msg.video.file_id
