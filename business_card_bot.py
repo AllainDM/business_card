@@ -6,7 +6,8 @@ import sqlite3
 # import emoji
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
-from aiogram.types import FSInputFile
+from aiogram.types import FSInputFile, InputMediaVideo
+# from aiohttp.web_fileresponse import content_type
 
 import config
 from FDataBase import FDataBase
@@ -20,6 +21,9 @@ dp = Dispatcher()
 
 # Отдельно сохраним ид видео
 video_id = main_text.main_video_id
+# video_mg = InputMediaVideo(type='video', media=FSInputFile(r'files/DEMO.mp4'))
+# print(video_mg)
+# print(video_mg.media)
 
 # # Подключение к бд
 def connect_db():
@@ -31,21 +35,24 @@ def connect_db():
 @dp.message(Command("start", "старт"))
 async def cmd_start(message: types.Message):
     global video_id
-    # TODO вынести текст в отдельный модуль, для удобства редактирования через админку.
-    text = main_text.main_text
-    try:
-        await bot.send_video(message.chat.id, video=video_id, caption=text)
-    except:
-        # Запасной вариант выцепления ид файла.
-        video_file = FSInputFile(path='files/DEMO.mp4')
-        msg = await bot.send_video(message.chat.id, video=video_file, caption=text)
-        # await bot.send_message(message.chat.id, text=msg.video.file_id)
-        video_id = msg.video.file_id
-
     # Узнаем ид пользователя.
     user_id = message.from_user.id
+    # TODO вынести текст в отдельный модуль, для удобства редактирования через админку.
+    text = main_text.main_text
+    # await bot.send_video(message.chat.id, video=video_mg.media, caption=text)
+    try:
+        await bot.send_video(message.chat.id, video=video_id, caption=text)
+        # await bot.send_video(message.chat.id, video=video_id, caption=text)
+    except:
+        # Запасной вариант выцепления ид файла.
+        video_file = FSInputFile(path='files/DEMO2.mp4')
+        msg = await bot.send_video(message.chat.id, video=video_file, caption=text)
+        # Глобально перезапишем ид.
+        video_id = msg.video.file_id
+        # Временный тестовый функционал по отправке нового ид видео конкретному пользователю.
+        if user_id == 976374565:
+            await bot.send_message(976374565, text=video_id)
 
-    # date_now = datetime.now()
     first_name = message.from_user.first_name
     last_name = message.from_user.last_name
     username = message.from_user.username

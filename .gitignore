@@ -5,6 +5,7 @@ venv
 # Конфиг
 config.py
 setting.py
+main_text.py
 
 # DB
 database.db
