@@ -6,7 +6,7 @@ import sqlite3
 # import emoji
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
-# from aiogram.types import FSInputFile
+from aiogram.types import FSInputFile
 
 import config
 from FDataBase import FDataBase
@@ -28,11 +28,14 @@ def connect_db():
 
 @dp.message(Command("start", "старт"))
 async def cmd_start(message: types.Message):
-    # video_file = FSInputFile(path='files/DEMO.mp4')
-    video_id = "BAACAgIAAxkDAAIDOmbnJnNzf_rwgSfmoz0d1AABwmaJPQACVGIAA-k5S18IgqIYQ3FbNgQ"
+    video_id = "BAACAgIAAxkDAAOrZucrXglPtWDTd0nB-vh-RCTag8sAAsFRAAJkjTlLaaZNuCbC4Ec2BA"
     # TODO вынести текст в отдельный модуль, для удобства редактирования через админку.
     text = main_text.main_text
     await bot.send_video(message.chat.id, video=video_id, caption=text)
+    # Запасной вариант выцепления ид файла.
+    # video_file = FSInputFile(path='files/DEMO.mp4')
+    # msg = await bot.send_video(message.chat.id, video=video_file, caption=text)
+    # await bot.send_message(message.chat.id, text=msg.video.file_id)
 
     # Узнаем ид пользователя.
     user_id = message.from_user.id
