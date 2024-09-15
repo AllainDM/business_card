@@ -23,3 +23,5 @@ main_text = (f"{emoji.emojize(':check_mark_button:')} Добро пожалов�
                  f"Контакты для связи:\n"
                  f"@vedename - Евгений Мамонтов\n"
                  f"@Anton_AsHuman - Антон Борисенко\n")
+
+main_video_id = "BAACAgIAAxkDAAOrZucrXglPtWDTd0nB-vh-RCTag8sAAsFRAAJkjTlLaaZNuCbC4Ec2BA"

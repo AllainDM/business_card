@@ -19,7 +19,7 @@ class FDataBase:
             return False
 
     # Добавить новую запись в лог входа пользователей.
-    def add_log(self, user_tg_id, first_name, last_name, username):
+    def add_log(self, user_tg_id, first_name="", last_name="", username=""):
         date = datetime.now()
         date = date.strftime("%d.%m.%Y %H:%M:%S")
         print("Запрос на добавление лога передан в модуль БД")

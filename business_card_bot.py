@@ -18,6 +18,8 @@ bot = Bot(token=config.BOT_API_TOKEN)
 # Диспетчер
 dp = Dispatcher()
 
+# Отдельно сохраним ид видео
+video_id = main_text.main_video_id
 
 # # Подключение к бд
 def connect_db():
@@ -28,14 +30,17 @@ def connect_db():
 
 @dp.message(Command("start", "старт"))
 async def cmd_start(message: types.Message):
-    video_id = "BAACAgIAAxkDAAOrZucrXglPtWDTd0nB-vh-RCTag8sAAsFRAAJkjTlLaaZNuCbC4Ec2BA"
+    global video_id
     # TODO вынести текст в отдельный модуль, для удобства редактирования через админку.
     text = main_text.main_text
-    await bot.send_video(message.chat.id, video=video_id, caption=text)
-    # Запасной вариант выцепления ид файла.
-    # video_file = FSInputFile(path='files/DEMO.mp4')
-    # msg = await bot.send_video(message.chat.id, video=video_file, caption=text)
-    # await bot.send_message(message.chat.id, text=msg.video.file_id)
+    try:
+        await bot.send_video(message.chat.id, video=video_id, caption=text)
+    except:
+        # Запасной вариант выцепления ид файла.
+        video_file = FSInputFile(path='files/DEMO.mp4')
+        msg = await bot.send_video(message.chat.id, video=video_file, caption=text)
+        # await bot.send_message(message.chat.id, text=msg.video.file_id)
+        video_id = msg.video.file_id
 
     # Узнаем ид пользователя.
     user_id = message.from_user.id
