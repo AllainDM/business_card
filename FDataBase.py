@@ -54,7 +54,7 @@ class FDataBase:
     # Получить все логи входов пользователей.
     def get_log(self):
         try:
-            self.__cur.execute(f"SELECT * FROM start_log")
+            self.__cur.execute(f"SELECT * FROM start_log LIMIT 10")
             res = self.__cur.fetchall()
             return res
         except sqlite3.Error as e:

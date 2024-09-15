@@ -3,18 +3,22 @@ import json
 from datetime import datetime
 import sqlite3
 
+import emoji
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 from aiogram.types import FSInputFile
 
 import config
 from FDataBase import FDataBase
+import main_text
 
 
 # Объект бота
 bot = Bot(token=config.BOT_API_TOKEN)
 # Диспетчер
 dp = Dispatcher()
+
+
 
 # # Подключение к бд
 def connect_db():
@@ -25,23 +29,12 @@ def connect_db():
 
 @dp.message(Command("start", "старт"))
 async def cmd_start(message: types.Message):
-    # TODO вынести текст в отдельный модуль, для удобства редактирования через админку.
-    text = (f"Наш сайт:\n"
-            f"https://aistrategiya.ru/\n\n"
-            f"Наши Telegram-каналы:\n"
-            f"@AI_Strategy_razrabotka_botov_tg\n"
-            f"@AsHuman_AI\n\n"
-            f"Наш ИИ-ассистент для подготовки ТЗ:\n"
-            f"@As_HumanHelp\n\n"
-            f"Наше портфолио:\n"
-            f"https://www.fl.ru/users/antonthai2022/portfolio/\n"
-            f"@As_HumanBot\n\n"
-            f"Контакты для связи:\n"
-            f"@vedename - Евгений Мамонтов\n"
-            f"@Anton_AsHuman - Антон Борисенко\n")
-
     video_file = FSInputFile(path='files/DEMO.mp4')
+
+    # TODO вынести текст в отдельный модуль, для удобства редактирования через админку.
+    text = main_text.main_text
     await bot.send_video(message.chat.id, video=video_file, caption=text)
+
     # Узнаем ид пользователя.
     user_id = message.from_user.id
 
